@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lenguaje: modo estudio y modo prueba</title>
+  <style>
+    :root{
+      --bg:#f6f8fb;
+      --card:#ffffff;
+      --text:#1f2937;
+      --muted:#6b7280;
+      --primary:#2563eb;
+      --primary-2:#1d4ed8;
+      --good:#15803d;
+      --bad:#b91c1c;
+      --soft-good:#e8f7ed;
+      --soft-bad:#fdecec;
+      --border:#dbe3ef;
+      --accent:#0f766e;
+      --shadow:0 10px 30px rgba(15,23,42,.08);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      color:var(--text);
+      background:linear-gradient(180deg,#eef4ff 0%, var(--bg) 100%);
+      line-height:1.45;
+    }
+    .wrap{
+      max-width:1000px;
+      margin:0 auto;
+      padding:24px 16px 48px;
+    }
+    .hero{
+      background:var(--card);
+      border:1px solid var(--border);
+      box-shadow:var(--shadow);
+      border-radius:20px;
+      padding:22px;
+      margin-bottom:18px;
+    }
+    h1{margin:0 0 8px;font-size:32px}
+    h2{margin:0 0 12px;font-size:24px}
+    h3{margin:18px 0 8px;font-size:20px}
+    p{margin:8px 0}
+    .muted{color:var(--muted)}
+    .tabs{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:14px;
+    }
+    .tab-btn, .primary-btn, .secondary-btn{
+      border:none;
+      border-radius:12px;
+      padding:12px 16px;
+      font-weight:700;
+      cursor:pointer;
+      transition:.2s ease;
+    }
+    .tab-btn{
+      background:#e5eefc;
+      color:#1e3a8a;
+    }
+    .tab-btn.active{
+      background:var(--primary);
+      color:#fff;
+    }
+    .primary-btn{
+      background:var(--primary);
+      color:#fff;
+    }
+    .primary-btn:hover{background:var(--primary-2)}
+    .secondary-btn{
+      background:#eef2f7;
+      color:#111827;
+    }
+    .panel{
+      display:none;
+      background:var(--card);
+      border:1px solid var(--border);
+      box-shadow:var(--shadow);
+      border-radius:20px;
+      padding:22px;
+    }
+    .panel.active{display:block}
+    .study-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+      gap:16px;
+      margin-top:14px;
+    }
+    .study-card{
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:16px;
+      background:#fbfdff;
+    }
+    .study-card ul{
+      margin:8px 0 0 18px;
+      padding:0;
+    }
+    .example{
+      margin-top:10px;
+      padding:10px 12px;
+      background:#eff6ff;
+      border-left:4px solid var(--primary);
+      border-radius:8px;
+    }
+    .toolbar{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:18px;
+      padding:14px;
+      background:#f8fbff;
+      border:1px solid var(--border);
+      border-radius:16px;
+    }
+    .toolbar .left{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    label{font-weight:700}
+    input[type="text"]{
+      padding:10px 12px;
+      border:1px solid #cfd8e3;
+      border-radius:10px;
+      min-width:220px;
+    }
+    .question{
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:16px;
+      margin-bottom:14px;
+      background:#fff;
+    }
+    .question h3{
+      margin:0 0 12px;
+      font-size:18px;
+    }
+    .options{
+      display:grid;
+      gap:8px;
+      margin-top:8px;
+    }
+    .option{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      padding:10px 12px;
+      border:1px solid #d7e0ea;
+      border-radius:12px;
+      background:#fafcff;
+    }
+    .option input{margin-top:3px}
+    .result-box{
+      margin-top:20px;
+      padding:18px;
+      border-radius:18px;
+      border:1px solid var(--border);
+      background:#fcfdff;
+    }
+    .score{
+      font-size:28px;
+      font-weight:800;
+      margin:6px 0;
+    }
+    .review-item{
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:16px;
+      margin-top:12px;
+      background:#fff;
+    }
+    .correct{background:var(--soft-good); border-color:#b7e1c3}
+    .incorrect{background:var(--soft-bad); border-color:#efb7b7}
+    .badge{
+      display:inline-block;
+      padding:5px 10px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:700;
+      margin-bottom:8px;
+    }
+    .badge.good{background:#dcfce7;color:#166534}
+    .badge.bad{background:#fee2e2;color:#991b1b}
+    .small{font-size:14px}
+    .footer-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:18px;
+    }
+    .pill{
+      display:inline-block;
+      padding:6px 10px;
+      border-radius:999px;
+      background:#ecfeff;
+      color:#155e75;
+      font-size:13px;
+      font-weight:700;
+      margin-right:6px;
+      margin-bottom:6px;
+    }
+    .summary-box{
+      margin-top:12px;
+      padding:14px;
+      border-radius:12px;
+      background:#f0fdf4;
+      border:1px solid #bbf7d0;
+    }
+    @media print{
+      .tabs,.toolbar,.footer-actions,.hero .muted:last-child{display:none !important}
+      body{background:white}
+      .panel,.hero{box-shadow:none}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <h1>Lenguaje: modo estudio + modo prueba</h1>
+      <p class="muted">Artículos definidos e indefinidos, partes del cuento, signos de puntuación y vocabulario.</p>
+      <p class="muted">Puedes estudiar primero y luego hacer una prueba de 30 preguntas. Al terminar, el sistema te da porcentaje, nota chilena de 1,0 a 7,0 y explicación de cada respuesta.</p>
+      <div class="tabs">
+        <button class="tab-btn active" data-target="studyPanel">Modo estudio</button>
+        <button class="tab-btn" data-target="quizPanel">Modo prueba</button>
+      </div>
+    </div>
+
+    <section id="studyPanel" class="panel active">
+      <h2>Modo estudio</h2>
+      <p>Este resumen condensa lo más importante de la materia de forma simple.</p>
+
+      <div class="study-grid">
+        <div class="study-card">
+          <h3>1. ¿Qué es un artículo?</h3>
+          <p>El <strong>artículo</strong> es una palabra que acompaña al <strong>sustantivo</strong>.</p>
+          <p>Debe coincidir con el sustantivo en:</p>
+          <ul>
+            <li><strong>Género</strong>: masculino o femenino</li>
+            <li><strong>Número</strong>: singular o plural</li>
+          </ul>
+          <div class="example">
+            <strong>Ejemplos:</strong><br>
+            el perro, la casa, los niños, las flores
+          </div>
+        </div>
+
+        <div class="study-card">
+          <h3>2. Artículos definidos</h3>
+          <p>Se usan cuando hablamos de algo conocido o específico.</p>
+          <ul>
+            <li><strong>el</strong></li>
+            <li><strong>la</strong></li>
+            <li><strong>los</strong></li>
+            <li><strong>las</strong></li>
+          </ul>
+          <div class="example">
+            <strong>Ejemplos:</strong><br>
+            <em>El</em> gato duerme.<br>
+            <em>Las</em> niñas cantan.
+          </div>
+        </div>
+
+        <div class="study-card">
+          <h3>3. Artículos indefinidos</h3>
+          <p>Se usan cuando hablamos de algo no específico.</p>
+          <ul>
+            <li><strong>un</strong></li>
+            <li><strong>una</strong></li>
+            <li><strong>unos</strong></li>
+            <li><strong>unas</strong></li>
+          </ul>
+          <div class="example">
+            <strong>Ejemplos:</strong><br>
+            <em>Un</em> niño corre.<br>
+            <em>Unas</em> abejas vuelan.
+          </div>
+        </div>
+
+        <div class="study-card">
+          <h3>4. Partes del cuento</h3>
+          <ul>
+            <li><strong>Inicio</strong>: se presentan personajes, lugar y tiempo.</li>
+            <li><strong>Nudo</strong>: aparece y se desarrolla el conflicto.</li>
+            <li><strong>Desenlace</strong>: el conflicto se resuelve.</li>
+          </ul>
+          <div class="example">
+            <strong>Mini ejemplo:</strong><br>
+            Inicio: Había una vez una niña en un bosque.<br>
+            Nudo: Se perdió buscando a su perro.<br>
+            Desenlace: Lo encontró con ayuda de un leñador.
+          </div>
+        </div>
+
+        <div class="study-card">
+          <h3>5. Signos de puntuación</h3>
+          <ul>
+            <li><strong>Punto seguido</strong>: separa ideas relacionadas en un mismo párrafo.</li>
+            <li><strong>Punto aparte</strong>: separa párrafos.</li>
+            <li><strong>Punto final</strong>: termina el texto.</li>
+          </ul>
+          <div class="example">
+            <strong>Idea clave:</strong><br>
+            Si sigo hablando del mismo tema en el mismo párrafo, uso <strong>punto seguido</strong>.
+          </div>
+        </div>
+
+        <div class="study-card">
+          <h3>6. Vocabulario</h3>
+          <ul>
+            <li><strong>disfrutar</strong>: pasarlo bien</li>
+            <li><strong>celebrar</strong>: festejar</li>
+            <li><strong>descansar</strong>: recuperar energía</li>
+            <li><strong>compensar</strong>: equilibrar una falta con otra acción</li>
+            <li><strong>alcalde</strong>: autoridad principal de una comuna</li>
+            <li><strong>comerciante</strong>: persona que vende productos</li>
+            <li><strong>menospreciar</strong>: dar poco valor</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="summary-box">
+        <strong>Consejo para recordar:</strong><br>
+        Artículos = acompañan al sustantivo.<br>
+        Cuento = inicio, nudo, desenlace.<br>
+        Puntuación = punto seguido, aparte y final.<br>
+        Vocabulario = entender el significado de las palabras.
+      </div>
+
+      <div class="footer-actions">
+        <button class="primary-btn" onclick="switchTab('quizPanel')">Ir a modo prueba</button>
+      </div>
+    </section>
+
+    <section id="quizPanel" class="panel">
+      <h2>Modo prueba</h2>
+      <div class="toolbar">
+        <div class="left">
+          <label for="studentName">Nombre:</label>
+          <input type="text" id="studentName" placeholder="Escribe tu nombre">
+        </div>
+        <div class="left">
+          <span class="pill">30 preguntas</span>
+          <span class="pill">De fácil a difícil</span>
+          <span class="pill">Con corrección y explicación</span>
+        </div>
+      </div>
+
+      <form id="quizForm"></form>
+
+      <div class="footer-actions">
+        <button class="primary-btn" type="button" id="submitBtn">Terminar prueba y corregir</button>
+        <button class="secondary-btn" type="button" id="resetBtn">Reiniciar</button>
+      </div>
+
+      <div id="results" class="result-box" style="display:none;"></div>
+    </section>
+  </div>
+
+  <script>
+    const studyButtons = document.querySelectorAll(".tab-btn");
+    studyButtons.forEach(btn => {
+      btn.addEventListener("click", () => switchTab(btn.dataset.target));
+    });
+
+    function switchTab(targetId){
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.toggle("active", b.dataset.target === targetId));
+      document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === targetId));
+      window.scrollTo({top:0, behavior:"smooth"});
+    }
+
+    const questions = [
+      {
+        type:"mc",
+        q:"1. ¿Cuál de estas palabras es un artículo definido?",
+        options:["un","el","una","unos"],
+        answer:1,
+        explanation:"Los artículos definidos son el, la, los y las. Se usan cuando hablamos de algo conocido o específico."
+      },
+      {
+        type:"mc",
+        q:"2. ¿Cuál de estas palabras es un artículo indefinido?",
+        options:["las","la","una","los"],
+        answer:2,
+        explanation:"Los artículos indefinidos son un, una, unos y unas. Se usan para algo no específico."
+      },
+      {
+        type:"mc",
+        q:"3. ¿En cuál opción el artículo concuerda correctamente con el sustantivo?",
+        options:["la perro","el cuaderno","los mesa","una árboles"],
+        answer:1,
+        explanation:"'El cuaderno' está correcto porque el artículo y el sustantivo coinciden en género masculino y número singular."
+      },
+      {
+        type:"mc",
+        q:"4. ¿Cuál es el plural de 'el'?",
+        options:["las","unos","los","la"],
+        answer:2,
+        explanation:"El plural de 'el' es 'los'. Ambos son artículos definidos masculinos."
+      },
+      {
+        type:"mc",
+        q:"5. ¿Cuál oración está bien escrita?",
+        options:["Una perro ladra.","Un gato duerme.","Los niña saltan.","La árboles crecen."],
+        answer:1,
+        explanation:"'Un gato duerme' tiene concordancia correcta entre artículo y sustantivo."
+      },
+      {
+        type:"mc",
+        q:"6. El artículo acompaña al...",
+        options:["verbo","sustantivo","adjetivo","párrafo"],
+        answer:1,
+        explanation:"El artículo acompaña al sustantivo: el niño, la mesa, unos libros."
+      },
+      {
+        type:"mc",
+        q:"7. En un cuento, la parte donde aparecen los personajes por primera vez suele ser el...",
+        options:["desenlace","nudo","inicio","final abierto"],
+        answer:2,
+        explanation:"En el inicio se presentan personajes, lugar y situación inicial."
+      },
+      {
+        type:"mc",
+        q:"8. ¿En qué parte del cuento se desarrolla el problema?",
+        options:["inicio","nudo","desenlace","título"],
+        answer:1,
+        explanation:"El nudo es la parte donde aparece y se desarrolla el conflicto."
+      },
+      {
+        type:"mc",
+        q:"9. El desenlace es la parte donde...",
+        options:["se presenta el lugar","se resuelve el conflicto","se elige el título","aparecen los artículos"],
+        answer:1,
+        explanation:"En el desenlace se soluciona el conflicto o problema de la historia."
+      },
+      {
+        type:"mc",
+        q:"10. ¿Para qué sirve el punto final?",
+        options:["Para separar palabras","Para terminar un texto","Para cambiar una letra","Para comenzar un cuento"],
+        answer:1,
+        explanation:"El punto final se usa al terminar completamente un texto."
+      },
+      {
+        type:"mc",
+        q:"11. ¿Para qué sirve el punto aparte?",
+        options:["Para separar párrafos","Para marcar una pregunta","Para unir ideas","Para escribir más rápido"],
+        answer:0,
+        explanation:"El punto aparte indica que termina un párrafo y comienza otro."
+      },
+      {
+        type:"mc",
+        q:"12. ¿Qué significa 'disfrutar'?",
+        options:["pasarlo bien","llorar mucho","perder algo","olvidar una tarea"],
+        answer:0,
+        explanation:"Disfrutar significa gozar algo o pasarlo bien."
+      },
+      {
+        type:"mc",
+        q:"13. ¿Qué significa 'comerciante'?",
+        options:["persona que corre","persona que vende productos","persona que enseña","persona que dibuja"],
+        answer:1,
+        explanation:"Un comerciante es una persona que compra o vende productos."
+      },
+      {
+        type:"mc",
+        q:"14. ¿Qué palabra significa dar poco valor a alguien o algo?",
+        options:["celebrar","descansar","menospreciar","compensar"],
+        answer:2,
+        explanation:"Menospreciar es considerar que alguien o algo vale poco."
+      },
+      {
+        type:"mc",
+        q:"15. En la oración 'Las abejas vuelan', la palabra 'Las' es un artículo...",
+        options:["indefinido singular","definido plural","indefinido plural","definido singular"],
+        answer:1,
+        explanation:"'Las' es un artículo definido plural femenino."
+      },
+      {
+        type:"mc",
+        q:"16. En la oración 'Unos niños juegan', la palabra 'Unos' es...",
+        options:["artículo definido","sustantivo","artículo indefinido","verbo"],
+        answer:2,
+        explanation:"'Unos' es un artículo indefinido plural masculino."
+      },
+      {
+        type:"mc",
+        q:"17. ¿Cuál de estas opciones completa correctamente la oración? '___ mesa está limpia.'",
+        options:["El","Los","La","Unos"],
+        answer:2,
+        explanation:"'Mesa' es femenino singular, por eso corresponde 'La mesa'."
+      },
+      {
+        type:"mc",
+        q:"18. ¿Cuál de estas opciones completa correctamente la oración? '___ cuadernos son nuevos.'",
+        options:["Los","La","Una","El"],
+        answer:0,
+        explanation:"'Cuadernos' está en plural masculino, así que corresponde 'Los cuadernos'."
+      },
+      {
+        type:"mc",
+        q:"19. Lee: 'Había una vez una niña que vivía en el campo.' Esta parte corresponde al...",
+        options:["nudo","inicio","desenlace","punto final"],
+        answer:1,
+        explanation:"La frase presenta a un personaje y una situación inicial, por eso pertenece al inicio."
+      },
+      {
+        type:"mc",
+        q:"20. Lee: 'Entonces el perro desapareció y todos comenzaron a buscarlo.' Esta parte corresponde al...",
+        options:["inicio","desenlace","nudo","título"],
+        answer:2,
+        explanation:"Aquí aparece el problema de la historia, por eso corresponde al nudo."
+      },
+      {
+        type:"mc",
+        q:"21. Lee: 'Finalmente encontraron al perro detrás de un árbol.' Esta parte corresponde al...",
+        options:["desenlace","inicio","nudo","vocabulario"],
+        answer:0,
+        explanation:"Aquí el conflicto se resuelve, por lo tanto es el desenlace."
+      },
+      {
+        type:"mc",
+        q:"22. ¿Cuál oración usa bien el punto seguido?",
+        options:[
+          "Ana juega. Come helado en el parque.",
+          "Ana juega Come helado.",
+          "Ana juega, final",
+          "Ana juega: termina el texto"
+        ],
+        answer:0,
+        explanation:"El punto seguido separa dos oraciones relacionadas dentro del mismo párrafo."
+      },
+      {
+        type:"mc",
+        q:"23. ¿Cuál oración tiene artículo y sustantivo correctamente concordados?",
+        options:["unas perro","los cuadernos","la zapatos","un flores"],
+        answer:1,
+        explanation:"'Los cuadernos' coincide en masculino plural."
+      },
+      {
+        type:"mc",
+        q:"24. ¿Qué significa 'compensar'?",
+        options:["equilibrar una falta con otra acción","correr muy rápido","terminar un cuento","hacer una pregunta"],
+        answer:0,
+        explanation:"Compensar es equilibrar, reparar o dar algo para contrarrestar una falta o esfuerzo."
+      },
+      {
+        type:"mc",
+        q:"25. ¿Qué significa 'alcalde'?",
+        options:["doctor del hospital","jefe de una comuna","niño de una escuela","persona que vende frutas"],
+        answer:1,
+        explanation:"El alcalde es la autoridad principal de una comuna o municipio."
+      },
+      {
+        type:"mc",
+        q:"26. ¿Cuál opción corrige mejor la expresión 'la perro corre'?",
+        options:["la perro corre","el perro corre","los perro corre","un perro corren"],
+        answer:1,
+        explanation:"'Perro' es masculino singular, así que el artículo correcto es 'el'."
+      },
+      {
+        type:"mc",
+        q:"27. ¿Cuál opción corrige mejor la expresión 'unos niña juega'?",
+        options:["unas niña juegan","una niña juega","unos niñas juega","un niña juega"],
+        answer:1,
+        explanation:"'Niña' es femenino singular, por eso la forma correcta es 'una niña juega'."
+      },
+      {
+        type:"mc",
+        q:"28. ¿Cuál grupo contiene solo artículos definidos?",
+        options:["el, la, los, las","un, una, unos, unas","el, una, los, unas","la, un, unos, las"],
+        answer:0,
+        explanation:"Los artículos definidos son exactamente el, la, los y las."
+      },
+      {
+        type:"mc",
+        q:"29. ¿Cuál grupo contiene solo artículos indefinidos?",
+        options:["el, la, los, las","un, una, unos, unas","la, una, los, unas","el, un, las, unos"],
+        answer:1,
+        explanation:"Los artículos indefinidos son un, una, unos y unas."
+      },
+      {
+        type:"mc",
+        q:"30. ¿Qué opción resume mejor el orden correcto de un cuento?",
+        options:[
+          "desenlace, inicio, nudo",
+          "inicio, desenlace, nudo",
+          "inicio, nudo, desenlace",
+          "nudo, inicio, desenlace"
+        ],
+        answer:2,
+        explanation:"El orden correcto del cuento es: inicio, nudo y desenlace."
+      }
+    ];
+
+    const quizForm = document.getElementById("quizForm");
+    const results = document.getElementById("results");
+
+    function renderQuiz(){
+      quizForm.innerHTML = "";
+      questions.forEach((item, index) => {
+        const block = document.createElement("div");
+        block.className = "question";
+
+        const title = document.createElement("h3");
+        title.textContent = item.q;
+        block.appendChild(title);
+
+        const options = document.createElement("div");
+        options.className = "options";
+
+        item.options.forEach((opt, optIndex) => {
+          const label = document.createElement("label");
+          label.className = "option";
+
+          const input = document.createElement("input");
+          input.type = "radio";
+          input.name = "q" + index;
+          input.value = optIndex;
+
+          const span = document.createElement("span");
+          span.textContent = opt;
+
+          label.appendChild(input);
+          label.appendChild(span);
+          options.appendChild(label);
+        });
+
+        block.appendChild(options);
+        quizForm.appendChild(block);
+      });
+    }
+
+    function calcGrade(score, total){
+      const pct = score / total;
+      const grade = 1 + (pct * 6);
+      return grade.toFixed(1).replace(".", ",");
+    }
+
+    function escapeHtml(text){
+      return text
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;");
+    }
+
+    document.getElementById("submitBtn").addEventListener("click", () => {
+      const name = document.getElementById("studentName").value.trim() || "Estudiante";
+      let score = 0;
+      let reviewHtml = "";
+
+      questions.forEach((item, index) => {
+        const checked = document.querySelector(`input[name="q${index}"]:checked`);
+        const userAnswer = checked ? Number(checked.value) : null;
+        const isCorrect = userAnswer === item.answer;
+        if(isCorrect) score++;
+
+        const badgeClass = isCorrect ? "good" : "bad";
+        const badgeText = isCorrect ? "Correcta" : "Incorrecta";
+
+        const userText = userAnswer === null ? "Sin responder" : item.options[userAnswer];
+        const correctText = item.options[item.answer];
+
+        reviewHtml += `
+          <div class="review-item ${isCorrect ? "correct" : "incorrect"}">
+            <div class="badge ${badgeClass}">${badgeText}</div>
+            <h3>${escapeHtml(item.q)}</h3>
+            <p><strong>Tu respuesta:</strong> ${escapeHtml(userText)}</p>
+            <p><strong>Respuesta correcta:</strong> ${escapeHtml(correctText)}</p>
+            <p class="small"><strong>Explicación:</strong> ${escapeHtml(item.explanation)}</p>
+          </div>
+        `;
+      });
+
+      const total = questions.length;
+      const pct = Math.round((score / total) * 100);
+      const grade = calcGrade(score, total);
+
+      let message = "";
+      if (pct >= 90) message = "¡Excelente trabajo!";
+      else if (pct >= 70) message = "Muy bien. Vas por buen camino.";
+      else if (pct >= 60) message = "Bien, pero conviene repasar algunos contenidos.";
+      else message = "Conviene volver al modo estudio y practicar nuevamente.";
+
+      results.style.display = "block";
+      results.innerHTML = `
+        <h2>Resultado de ${escapeHtml(name)}</h2>
+        <div class="score">${score} / ${total}</div>
+        <p><strong>Porcentaje:</strong> ${pct}%</p>
+        <p><strong>Nota:</strong> ${grade}</p>
+        <p>${message}</p>
+        <div class="summary-box">
+          <strong>Sugerencia de estudio:</strong><br>
+          Revisa especialmente artículos, partes del cuento y signos de puntuación si tuviste errores en esas áreas.
+        </div>
+        <h3 style="margin-top:18px;">Revisión pregunta por pregunta</h3>
+        ${reviewHtml}
+      `;
+      results.scrollIntoView({behavior:"smooth"});
+    });
+
+    document.getElementById("resetBtn").addEventListener("click", () => {
+      document.getElementById("quizForm").reset();
+      document.getElementById("studentName").value = "";
+      results.style.display = "none";
+      results.innerHTML = "";
+      window.scrollTo({top:0, behavior:"smooth"});
+    });
+
+    renderQuiz();
+  </script>
+</body>
+</html>
