@@ -45,7 +45,7 @@ input[type="text"]{width:100%;max-width:320px;padding:12px 13px;border:1px solid
 <div class="app">
   <div class="hero card">
     <h1>Lenguaje Pro Random</h1>
-    <p class="muted">Ahora con pruebas breve, intermedia y extendida, usando un pool de 60 preguntas y mezcla aleatoria en cada intento.</p>
+    <p class="muted">Práctica con pruebas breve, intermedia y extendida, usando un pool de 60 preguntas y mezcla aleatoria en cada intento.</p>
     <div class="tabs">
       <button class="tab-btn active" data-target="studyPanel">Modo estudio</button>
       <button class="tab-btn" data-target="quizPanel">Modo prueba</button>
@@ -63,7 +63,7 @@ input[type="text"]{width:100%;max-width:320px;padding:12px 13px;border:1px solid
       <div class="study-box"><h3>Puntuación</h3><ul><li><strong>Punto seguido:</strong> separa ideas del mismo párrafo.</li><li><strong>Punto aparte:</strong> cambia de párrafo.</li><li><strong>Punto final:</strong> termina el texto.</li></ul></div>
       <div class="study-box"><h3>Vocabulario</h3><ul><li>disfrutar = pasarlo bien</li><li>celebrar = festejar</li><li>descansar = recuperar energía</li><li>compensar = equilibrar</li><li>alcalde = jefe de una comuna</li><li>comerciante = persona que vende</li><li>menospreciar = dar poco valor</li></ul></div>
     </div>
-    <div class="note-box"><strong>Me parece muy buena idea:</strong> al tener 60 preguntas y pruebas de distinto largo, el sistema se siente más vivo, permite practicar varias veces y evita memorizar solo el orden.</div>
+    <div class="note-box"><strong>Ayuda memoria:</strong> artículos = acompañan al sustantivo. Cuento = inicio, nudo, desenlace. Puntuación = seguido, aparte y final.</div>
     <div style="margin-top:14px;"><button class="btn btn-primary" onclick="switchTab('quizPanel')">Ir a modo prueba</button></div>
   </section>
 
@@ -82,11 +82,11 @@ input[type="text"]{width:100%;max-width:320px;padding:12px 13px;border:1px solid
       <div>
         <div class="small" style="font-weight:700;margin-bottom:8px;">Elige modalidad:</div>
         <div class="mode-grid">
-          <button class="mode-btn active" data-size="10">Breve · 10 preguntas</button>
-          <button class="mode-btn" data-size="20">Intermedia · 20 preguntas</button>
-          <button class="mode-btn" data-size="30">Extendida · 30 preguntas</button>
+          <button class="mode-btn active" data-size="10" type="button">Breve · 10 preguntas</button>
+          <button class="mode-btn" data-size="20" type="button">Intermedia · 20 preguntas</button>
+          <button class="mode-btn" data-size="30" type="button">Extendida · 30 preguntas</button>
         </div>
-        <div class="small muted" style="margin-top:8px;">Cada nuevo intento mezcla preguntas distintas del pool. Algunas pueden repetirse y otras no.</div>
+        <div class="small muted" style="margin-top:8px;">Para aplicar la modalidad elegida, presiona <strong>Aplicar modalidad / nuevo intento</strong>.</div>
       </div>
     </div>
 
@@ -102,7 +102,7 @@ input[type="text"]{width:100%;max-width:320px;padding:12px 13px;border:1px solid
         <button class="btn btn-secondary" id="nextBtn" type="button">Siguiente</button>
       </div>
       <div class="nav-right">
-        <button class="btn btn-secondary" id="newAttemptBtn" type="button">Nuevo intento</button>
+        <button class="btn btn-primary" id="newAttemptBtn" type="button">Aplicar modalidad / nuevo intento</button>
         <button class="btn btn-secondary" id="clearProgressBtn" type="button">Borrar avance</button>
         <button class="btn btn-primary" id="finishBtn" type="button">Terminar prueba</button>
       </div>
@@ -115,11 +115,16 @@ input[type="text"]{width:100%;max-width:320px;padding:12px 13px;border:1px solid
 <div id="printSheet" class="print-sheet"></div>
 
 <script>
-const STORAGE_KEY="lenguaje_pro_random_v1";
+const STORAGE_KEY="lenguaje_pro_random_v2";
 const POOL=[{"q": "1. ¿Cuál de estas palabras es un artículo definido?", "options": ["un", "el", "una", "unos"], "answer": 1, "explanation": "Los artículos definidos son el, la, los y las."}, {"q": "2. ¿Cuál de estas palabras es un artículo indefinido?", "options": ["las", "la", "una", "los"], "answer": 2, "explanation": "Los artículos indefinidos son un, una, unos y unas."}, {"q": "3. ¿En cuál opción el artículo concuerda correctamente con el sustantivo?", "options": ["la perro", "el cuaderno", "los mesa", "una árboles"], "answer": 1, "explanation": "“El cuaderno” está correcto porque coincide en género y número."}, {"q": "4. ¿Cuál es el plural de “el”?", "options": ["las", "unos", "los", "la"], "answer": 2, "explanation": "El plural de “el” es “los”."}, {"q": "5. ¿Cuál oración está bien escrita?", "options": ["Una perro ladra.", "Un gato duerme.", "Los niña saltan.", "La árboles crecen."], "answer": 1, "explanation": "“Un gato duerme” tiene concordancia correcta."}, {"q": "6. El artículo acompaña al...", "options": ["verbo", "sustantivo", "adjetivo", "párrafo"], "answer": 1, "explanation": "El artículo acompaña al sustantivo."}, {"q": "7. En un cuento, la parte donde aparecen los personajes por primera vez suele ser el...", "options": ["desenlace", "nudo", "inicio", "final abierto"], "answer": 2, "explanation": "En el inicio se presentan personajes, lugar y situación inicial."}, {"q": "8. ¿En qué parte del cuento se desarrolla el problema?", "options": ["inicio", "nudo", "desenlace", "título"], "answer": 1, "explanation": "El nudo es la parte donde aparece y se desarrolla el conflicto."}, {"q": "9. El desenlace es la parte donde...", "options": ["se presenta el lugar", "se resuelve el conflicto", "se elige el título", "aparecen los artículos"], "answer": 1, "explanation": "En el desenlace se soluciona el conflicto."}, {"q": "10. ¿Para qué sirve el punto final?", "options": ["Para separar palabras", "Para terminar un texto", "Para cambiar una letra", "Para comenzar un cuento"], "answer": 1, "explanation": "El punto final termina el texto."}, {"q": "11. ¿Para qué sirve el punto aparte?", "options": ["Para separar párrafos", "Para marcar una pregunta", "Para unir ideas", "Para escribir más rápido"], "answer": 0, "explanation": "El punto aparte separa párrafos."}, {"q": "12. ¿Qué significa “disfrutar”?", "options": ["pasarlo bien", "llorar mucho", "perder algo", "olvidar una tarea"], "answer": 0, "explanation": "Disfrutar es pasarlo bien o gozar algo."}, {"q": "13. ¿Qué significa “comerciante”?", "options": ["persona que corre", "persona que vende productos", "persona que enseña", "persona que dibuja"], "answer": 1, "explanation": "Un comerciante vende productos."}, {"q": "14. ¿Qué palabra significa dar poco valor a alguien o algo?", "options": ["celebrar", "descansar", "menospreciar", "compensar"], "answer": 2, "explanation": "Menospreciar es dar poco valor."}, {"q": "15. En la oración “Las abejas vuelan”, la palabra “Las” es un artículo...", "options": ["indefinido singular", "definido plural", "indefinido plural", "definido singular"], "answer": 1, "explanation": "“Las” es un artículo definido plural femenino."}, {"q": "16. En la oración “Unos niños juegan”, la palabra “Unos” es...", "options": ["artículo definido", "sustantivo", "artículo indefinido", "verbo"], "answer": 2, "explanation": "“Unos” es un artículo indefinido plural."}, {"q": "17. ¿Cuál de estas opciones completa correctamente la oración? “___ mesa está limpia.”", "options": ["El", "Los", "La", "Unos"], "answer": 2, "explanation": "Mesa es femenino singular: “La mesa”."}, {"q": "18. ¿Cuál de estas opciones completa correctamente la oración? “___ cuadernos son nuevos.”", "options": ["Los", "La", "Una", "El"], "answer": 0, "explanation": "Cuadernos está en masculino plural: “Los cuadernos”."}, {"q": "19. Lee: “Había una vez una niña que vivía en el campo.” Esta parte corresponde al...", "options": ["nudo", "inicio", "desenlace", "punto final"], "answer": 1, "explanation": "Presenta personaje y situación inicial."}, {"q": "20. Lee: “Entonces el perro desapareció y todos comenzaron a buscarlo.” Esta parte corresponde al...", "options": ["inicio", "desenlace", "nudo", "título"], "answer": 2, "explanation": "Aquí aparece el problema, por eso es nudo."}, {"q": "21. Lee: “Finalmente encontraron al perro detrás de un árbol.” Esta parte corresponde al...", "options": ["desenlace", "inicio", "nudo", "vocabulario"], "answer": 0, "explanation": "Aquí el conflicto se resuelve."}, {"q": "22. ¿Cuál oración usa bien el punto seguido?", "options": ["Ana juega. Come helado en el parque.", "Ana juega Come helado.", "Ana juega, final", "Ana juega: termina el texto"], "answer": 0, "explanation": "El punto seguido separa oraciones del mismo párrafo."}, {"q": "23. ¿Cuál oración tiene artículo y sustantivo correctamente concordados?", "options": ["unas perro", "los cuadernos", "la zapatos", "un flores"], "answer": 1, "explanation": "“Los cuadernos” coincide en masculino plural."}, {"q": "24. ¿Qué significa “compensar”?", "options": ["equilibrar una falta con otra acción", "correr muy rápido", "terminar un cuento", "hacer una pregunta"], "answer": 0, "explanation": "Compensar es equilibrar o reparar."}, {"q": "25. ¿Qué significa “alcalde”?", "options": ["doctor del hospital", "jefe de una comuna", "niño de una escuela", "persona que vende frutas"], "answer": 1, "explanation": "El alcalde es la autoridad principal de una comuna."}, {"q": "26. ¿Cuál opción corrige mejor la expresión “la perro corre”?", "options": ["la perro corre", "el perro corre", "los perro corre", "un perro corren"], "answer": 1, "explanation": "Perro es masculino singular: “el perro corre”."}, {"q": "27. ¿Cuál opción corrige mejor la expresión “unos niña juega”?", "options": ["unas niña juegan", "una niña juega", "unos niñas juega", "un niña juega"], "answer": 1, "explanation": "Niña es femenino singular: “una niña juega”."}, {"q": "28. ¿Cuál grupo contiene solo artículos definidos?", "options": ["el, la, los, las", "un, una, unos, unas", "el, una, los, unas", "la, un, unos, las"], "answer": 0, "explanation": "Los artículos definidos son el, la, los y las."}, {"q": "29. ¿Cuál grupo contiene solo artículos indefinidos?", "options": ["el, la, los, las", "un, una, unos, unas", "la, una, los, unas", "el, un, las, unos"], "answer": 1, "explanation": "Los artículos indefinidos son un, una, unos y unas."}, {"q": "30. ¿Qué opción resume mejor el orden correcto de un cuento?", "options": ["desenlace, inicio, nudo", "inicio, desenlace, nudo", "inicio, nudo, desenlace", "nudo, inicio, desenlace"], "answer": 2, "explanation": "El orden correcto es inicio, nudo y desenlace."}, {"q": "31. ¿Cuál es el artículo correcto para “árbol” en singular?", "options": ["la", "el", "las", "unas"], "answer": 1, "explanation": "Árbol es masculino singular: el árbol."}, {"q": "32. ¿Cuál es el artículo correcto para “abejas” en plural?", "options": ["el", "una", "las", "un"], "answer": 2, "explanation": "Abejas es femenino plural: las abejas."}, {"q": "33. ¿Qué parte del cuento presenta el lugar donde ocurre la historia?", "options": ["inicio", "nudo", "desenlace", "final"], "answer": 0, "explanation": "El lugar se presenta normalmente en el inicio."}, {"q": "34. ¿Cuál palabra significa “festejar”?", "options": ["celebrar", "menospreciar", "compensar", "descansar"], "answer": 0, "explanation": "Celebrar significa festejar."}, {"q": "35. ¿Cuál palabra significa “recuperar energía”?", "options": ["disfrutar", "descansar", "celebrar", "comerciante"], "answer": 1, "explanation": "Descansar es recuperar energía."}, {"q": "36. ¿Cuál oración está correctamente escrita?", "options": ["La niña lee.", "El niñas leen.", "Un flores crecen.", "Las perro corre."], "answer": 0, "explanation": "“La niña lee” tiene concordancia correcta."}, {"q": "37. ¿Qué artículo falta? “___ flor es roja.”", "options": ["Los", "La", "Unos", "El"], "answer": 1, "explanation": "Flor es femenino singular: la flor."}, {"q": "38. ¿Qué artículo falta? “___ pájaros cantan.”", "options": ["Los", "El", "Una", "La"], "answer": 0, "explanation": "Pájaros es masculino plural: los pájaros."}, {"q": "39. ¿Cuál de estas palabras NO es un artículo?", "options": ["la", "unos", "gato", "el"], "answer": 2, "explanation": "“Gato” es un sustantivo, no un artículo."}, {"q": "40. ¿Qué palabra nombra a la persona que vende en una tienda?", "options": ["alcalde", "comerciante", "profesor", "vecino"], "answer": 1, "explanation": "Esa persona es un comerciante."}, {"q": "41. ¿Qué parte del cuento suele terminar con la solución del problema?", "options": ["inicio", "nudo", "desenlace", "presentación"], "answer": 2, "explanation": "El desenlace resuelve el problema."}, {"q": "42. ¿Qué signo marca el final total de un texto?", "options": ["coma", "punto seguido", "punto final", "punto aparte"], "answer": 2, "explanation": "El punto final cierra todo el texto."}, {"q": "43. ¿Cuál oración muestra un artículo indefinido?", "options": ["La mesa es grande.", "Los niños corren.", "Un perro duerme.", "Las flores crecen."], "answer": 2, "explanation": "“Un” es un artículo indefinido."}, {"q": "44. ¿Cuál oración muestra un artículo definido?", "options": ["Una gata duerme.", "Unos niños juegan.", "El auto frena.", "Un árbol cae."], "answer": 2, "explanation": "“El” es un artículo definido."}, {"q": "45. ¿Qué significa menospreciar?", "options": ["valorar mucho", "dar poco valor", "festejar algo", "descansar"], "answer": 1, "explanation": "Menospreciar es dar poco valor."}, {"q": "46. “Había una vez un castillo junto al mar.” Esa oración pertenece al...", "options": ["inicio", "nudo", "desenlace", "problema"], "answer": 0, "explanation": "Presenta el lugar y ambiente inicial."}, {"q": "47. “El dragón apareció y asustó a todos.” Esa oración pertenece al...", "options": ["inicio", "nudo", "desenlace", "título"], "answer": 1, "explanation": "Aquí aparece el conflicto."}, {"q": "48. “Al final, el caballero venció al dragón.” Esa oración pertenece al...", "options": ["inicio", "nudo", "desenlace", "resumen"], "answer": 2, "explanation": "Aquí se resuelve el conflicto."}, {"q": "49. ¿Qué conjunto está completamente bien escrito?", "options": ["la casa, los niños", "el mesa, la perro", "unas gato, un flores", "los árbol, la autos"], "answer": 0, "explanation": "En “la casa, los niños” ambas expresiones concuerdan."}, {"q": "50. ¿Cuál oración necesita punto aparte y no punto seguido?", "options": ["Dos ideas del mismo párrafo.", "Una oración que continúa el mismo tema.", "Una idea nueva en otro párrafo.", "Una frase muy corta."], "answer": 2, "explanation": "El punto aparte se usa cuando empieza otro párrafo o una nueva idea principal."}, {"q": "51. ¿Qué artículo usarías con “niñas”?", "options": ["el", "la", "los", "las"], "answer": 3, "explanation": "Niñas es femenino plural: las niñas."}, {"q": "52. ¿Qué artículo usarías con “libro”?", "options": ["el", "las", "una", "unas"], "answer": 0, "explanation": "Libro es masculino singular: el libro."}, {"q": "53. ¿Cuál alternativa tiene artículo indefinido plural?", "options": ["las", "los", "unas", "el"], "answer": 2, "explanation": "“Unas” es indefinido plural."}, {"q": "54. ¿Cuál alternativa tiene artículo definido singular?", "options": ["un", "el", "unos", "unas"], "answer": 1, "explanation": "“El” es definido singular."}, {"q": "55. ¿Qué significa “celebrar”?", "options": ["festejar", "ocultar", "descansar", "correr"], "answer": 0, "explanation": "Celebrar es festejar."}, {"q": "56. ¿Qué significa “descansar”?", "options": ["trabajar más", "recuperar energía", "menospreciar", "vender"], "answer": 1, "explanation": "Descansar es recuperar energía."}, {"q": "57. En “La profesora explica. Los alumnos escuchan.” el punto usado entre ambas oraciones es...", "options": ["punto final", "punto aparte", "punto seguido", "coma"], "answer": 2, "explanation": "Son dos oraciones relacionadas dentro del mismo párrafo."}, {"q": "58. ¿Qué opción completa mejor? “___ mariposa vuela sobre las flores.”", "options": ["El", "Los", "La", "Unos"], "answer": 2, "explanation": "Mariposa es femenino singular: la mariposa."}, {"q": "59. ¿Qué opción completa mejor? “___ lápices están sobre la mesa.”", "options": ["Los", "La", "El", "Una"], "answer": 0, "explanation": "Lápices es masculino plural: los lápices."}, {"q": "60. ¿Cuál afirmación es correcta?", "options": ["El inicio resuelve el problema.", "El nudo presenta personajes por primera vez.", "El desenlace resuelve el conflicto.", "El punto final separa párrafos."], "answer": 2, "explanation": "El desenlace es la parte que resuelve el conflicto."}];
 const tabs=document.querySelectorAll(".tab-btn");
 const modeButtons=document.querySelectorAll(".mode-btn");
-function switchTab(targetId){tabs.forEach(btn=>btn.classList.toggle("active",btn.dataset.target===targetId));document.querySelectorAll(".panel").forEach(p=>p.classList.toggle("active",p.id===targetId));window.scrollTo({top:0,behavior:"smooth"});}
+
+function switchTab(targetId){
+  tabs.forEach(btn=>btn.classList.toggle("active",btn.dataset.target===targetId));
+  document.querySelectorAll(".panel").forEach(p=>p.classList.toggle("active",p.id===targetId));
+  window.scrollTo({top:0,behavior:"smooth"});
+}
 tabs.forEach(btn=>btn.addEventListener("click",()=>switchTab(btn.dataset.target)));
 
 let state={
@@ -142,13 +147,13 @@ const answeredText=document.getElementById("answeredText");
 const progressFill=document.getElementById("progressFill");
 const printSheet=document.getElementById("printSheet");
 
-function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}
+function saveState(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
 function loadState(){
   try {
-    const raw=localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(STORAGE_KEY);
     if(raw) {
-      const parsed=JSON.parse(raw);
-      if(parsed && Array.isArray(parsed.quizQuestions)) state=parsed;
+      const parsed = JSON.parse(raw);
+      if(parsed && Array.isArray(parsed.quizQuestions)) state = parsed;
     }
   } catch(e) {}
 }
@@ -161,47 +166,45 @@ function shuffle(array){
   return arr;
 }
 function buildAttempt(size){
-  const indexed=POOL.map((q,idx)=>({...q,poolIndex:idx}));
-  const selected=shuffle(indexed).slice(0,size);
-  state.modeSize=size;
-  state.quizQuestions=selected;
-  state.answers=new Array(size).fill(null);
-  state.currentIndex=0;
-  state.finished=false;
-  state.lastResult=null;
-  state.attemptSeed=Date.now();
+  const indexed = POOL.map((q, idx) => ({...q, poolIndex: idx}));
+  const selected = shuffle(indexed).slice(0, size);
+  state.modeSize = size;
+  state.quizQuestions = selected;
+  state.answers = new Array(size).fill(null);
+  state.currentIndex = 0;
+  state.finished = false;
+  state.lastResult = null;
+  state.attemptSeed = Date.now();
   saveState();
 }
 function ensureAttempt(){
-  if(!Array.isArray(state.quizQuestions) || state.quizQuestions.length===0) buildAttempt(state.modeSize||10);
+  if(!Array.isArray(state.quizQuestions) || state.quizQuestions.length === 0) buildAttempt(state.modeSize || 10);
 }
 function clearState(){
   localStorage.removeItem(STORAGE_KEY);
-  state={name:"",modeSize:10,currentIndex:0,quizQuestions:[],answers:[],finished:false,lastResult:null,attemptSeed:null};
+  state = {name:"",modeSize:10,currentIndex:0,quizQuestions:[],answers:[],finished:false,lastResult:null,attemptSeed:null};
   buildAttempt(10);
   renderAll();
 }
-function calcGrade(score,total){return (1+(score/total)*6).toFixed(1).replace(".",",");}
-function escapeHtml(text){return String(text).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;");}
+function calcGrade(score,total){ return (1 + (score/total)*6).toFixed(1).replace(".", ","); }
+function escapeHtml(text){ return String(text).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;"); }
 
 function renderModes(){
-  modeButtons.forEach(btn=>btn.classList.toggle("active", Number(btn.dataset.size)===Number(state.modeSize)));
+  modeButtons.forEach(btn=>btn.classList.toggle("active", Number(btn.dataset.size) === Number(state.modeSize)));
 }
-
 modeButtons.forEach(btn=>btn.addEventListener("click",()=>{
-  const size=Number(btn.dataset.size);
-  state.modeSize=size;
+  state.modeSize = Number(btn.dataset.size);
   renderModes();
   saveState();
 }));
 
 function renderQuestion(){
   ensureAttempt();
-  const q=state.quizQuestions[state.currentIndex];
-  const selected=state.answers[state.currentIndex];
-  questionContainer.innerHTML=`
+  const q = state.quizQuestions[state.currentIndex];
+  const selected = state.answers[state.currentIndex];
+  questionContainer.innerHTML = `
     <div class="question-card">
-      <div class="question-number">Pregunta ${state.currentIndex+1}</div>
+      <div class="question-number">Pregunta ${state.currentIndex + 1}</div>
       <div class="question-text">${escapeHtml(q.q)}</div>
       <div class="options">
         ${q.options.map((opt,i)=>`
@@ -214,39 +217,57 @@ function renderQuestion(){
     </div>`;
   questionContainer.querySelectorAll('input[name="currentQuestion"]').forEach(input=>{
     input.addEventListener("change",(e)=>{
-      state.answers[state.currentIndex]=Number(e.target.value);
-      saveState(); renderQuestion(); renderProgress(); renderJump();
+      state.answers[state.currentIndex] = Number(e.target.value);
+      saveState();
+      renderQuestion();
+      renderProgress();
+      renderJump();
     });
   });
 }
 
 function renderProgress(){
-  const total=state.quizQuestions.length;
-  const answered=state.answers.filter(v=>v!==null).length;
-  progressText.textContent=`Pregunta ${state.currentIndex+1} de ${total}`;
-  answeredText.textContent=`Respondidas: ${answered} / ${total}`;
-  progressFill.style.width=`${((state.currentIndex+1)/total)*100}%`;
+  const total = state.quizQuestions.length;
+  const answered = state.answers.filter(v=>v!==null).length;
+  progressText.textContent = `Pregunta ${state.currentIndex + 1} de ${total}`;
+  answeredText.textContent = `Respondidas: ${answered} / ${total}`;
+  progressFill.style.width = `${((state.currentIndex + 1) / total) * 100}%`;
 }
 
 function renderJump(){
-  jumpContainer.innerHTML=state.quizQuestions.map((_,i)=>`<button class="jump-btn ${state.answers[i]!==null?'answered':''} ${i===state.currentIndex?'current':''}" data-index="${i}" type="button">${i+1}</button>`).join("");
+  jumpContainer.innerHTML = state.quizQuestions.map((_,i)=>`<button class="jump-btn ${state.answers[i]!==null?'answered':''} ${i===state.currentIndex?'current':''}" data-index="${i}" type="button">${i+1}</button>`).join("");
   jumpContainer.querySelectorAll(".jump-btn").forEach(btn=>btn.addEventListener("click",()=>{
-    state.currentIndex=Number(btn.dataset.index); saveState(); renderQuestion(); renderProgress(); renderJump(); window.scrollTo({top:0,behavior:"smooth"});
+    state.currentIndex = Number(btn.dataset.index);
+    saveState();
+    renderQuestion();
+    renderProgress();
+    renderJump();
+    window.scrollTo({top:0,behavior:"smooth"});
   }));
 }
 
 function scoreQuiz(){
-  let score=0;
-  const review=[];
+  let score = 0;
+  const review = [];
   state.quizQuestions.forEach((q,i)=>{
-    const user=state.answers[i], ok=user===q.answer;
+    const user = state.answers[i];
+    const ok = user === q.answer;
     if(ok) score++;
     review.push({
-      index:i+1,question:q.q,userAnswer:user===null?"Sin responder":q.options[user],
-      correctAnswer:q.options[q.answer], explanation:q.explanation, ok
+      index:i+1,
+      question:q.q,
+      userAnswer:user===null?"Sin responder":q.options[user],
+      correctAnswer:q.options[q.answer],
+      explanation:q.explanation,
+      ok
     });
   });
-  return {score,pct:Math.round((score/state.quizQuestions.length)*100),grade:calcGrade(score,state.quizQuestions.length),review};
+  return {
+    score,
+    pct:Math.round((score / state.quizQuestions.length) * 100),
+    grade:calcGrade(score, state.quizQuestions.length),
+    review
+  };
 }
 
 function feedbackMessage(pct){
@@ -258,9 +279,9 @@ function feedbackMessage(pct){
 
 function renderResults(){
   if(!state.lastResult) return;
-  const r=state.lastResult, name=state.name||"Estudiante", total=state.quizQuestions.length;
-  results.style.display="block";
-  results.innerHTML=`
+  const r = state.lastResult, name = state.name || "Estudiante", total = state.quizQuestions.length;
+  results.style.display = "block";
+  results.innerHTML = `
     <h2>Resultado de ${escapeHtml(name)}</h2>
     <div class="score">${r.score} / ${total}</div>
     <p><strong>Modalidad:</strong> ${total} preguntas</p>
@@ -284,17 +305,20 @@ function renderResults(){
         </div>
       `).join("")}
     </div>`;
-  document.getElementById("printPdfBtn").addEventListener("click",printResults);
-  document.getElementById("hideReviewBtn").addEventListener("click",()=>{
-    const area=document.getElementById("reviewArea"), btn=document.getElementById("hideReviewBtn"), hidden=area.style.display==="none";
-    area.style.display=hidden?"block":"none"; btn.textContent=hidden?"Ocultar revisión":"Mostrar revisión";
+  document.getElementById("printPdfBtn").addEventListener("click", printResults);
+  document.getElementById("hideReviewBtn").addEventListener("click", ()=>{
+    const area = document.getElementById("reviewArea");
+    const btn = document.getElementById("hideReviewBtn");
+    const hidden = area.style.display === "none";
+    area.style.display = hidden ? "block" : "none";
+    btn.textContent = hidden ? "Ocultar revisión" : "Mostrar revisión";
   });
 }
 
 function printResults(){
   if(!state.lastResult) return;
-  const r=state.lastResult, name=state.name||"Estudiante", total=state.quizQuestions.length;
-  printSheet.innerHTML=`
+  const r = state.lastResult, name = state.name || "Estudiante", total = state.quizQuestions.length;
+  printSheet.innerHTML = `
     <h1>Resultado prueba de Lenguaje</h1>
     <p><strong>Nombre:</strong> ${escapeHtml(name)}</p>
     <p><strong>Modalidad:</strong> ${total} preguntas</p>
@@ -315,9 +339,9 @@ function printResults(){
 }
 
 function finishQuiz(){
-  state.name=studentName.value.trim();
-  state.finished=true;
-  state.lastResult=scoreQuiz();
+  state.name = studentName.value.trim();
+  state.finished = true;
+  state.lastResult = scoreQuiz();
   saveState();
   renderResults();
   results.scrollIntoView({behavior:"smooth"});
@@ -325,25 +349,55 @@ function finishQuiz(){
 
 function renderAll(){
   ensureAttempt();
-  studentName.value=state.name||"";
+  studentName.value = state.name || "";
   renderModes();
   renderQuestion();
   renderProgress();
   renderJump();
   if(state.finished && state.lastResult) renderResults();
-  else {results.style.display="none"; results.innerHTML="";}
+  else {
+    results.style.display = "none";
+    results.innerHTML = "";
+  }
 }
 
-document.getElementById("prevBtn").addEventListener("click",()=>{if(state.currentIndex>0){state.currentIndex--;saveState();renderQuestion();renderProgress();renderJump();window.scrollTo({top:0,behavior:"smooth"});}});
-document.getElementById("nextBtn").addEventListener("click",()=>{if(state.currentIndex<state.quizQuestions.length-1){state.currentIndex++;saveState();renderQuestion();renderProgress();renderJump();window.scrollTo({top:0,behavior:"smooth"});}});
-document.getElementById("finishBtn").addEventListener("click",finishQuiz);
-document.getElementById("clearProgressBtn").addEventListener("click",()=>{if(confirm("¿Seguro que quieres borrar el avance y el resultado guardado?")) clearState();});
-document.getElementById("newAttemptBtn").addEventListener("click",()=>{
-  const size=Number(state.modeSize)||10;
-  const ok=confirm(`Se creará un nuevo intento aleatorio de ${size} preguntas. El intento actual se reemplazará. ¿Continuar?`);
-  if(ok){buildAttempt(size); renderAll(); window.scrollTo({top:0,behavior:"smooth"});}
+document.getElementById("prevBtn").addEventListener("click",()=>{
+  if(state.currentIndex>0){
+    state.currentIndex--;
+    saveState();
+    renderQuestion();
+    renderProgress();
+    renderJump();
+    window.scrollTo({top:0,behavior:"smooth"});
+  }
 });
-studentName.addEventListener("input",()=>{state.name=studentName.value.trim();saveState();});
+document.getElementById("nextBtn").addEventListener("click",()=>{
+  if(state.currentIndex<state.quizQuestions.length-1){
+    state.currentIndex++;
+    saveState();
+    renderQuestion();
+    renderProgress();
+    renderJump();
+    window.scrollTo({top:0,behavior:"smooth"});
+  }
+});
+document.getElementById("finishBtn").addEventListener("click", finishQuiz);
+document.getElementById("clearProgressBtn").addEventListener("click",()=>{
+  if(confirm("¿Seguro que quieres borrar el avance y el resultado guardado?")) clearState();
+});
+document.getElementById("newAttemptBtn").addEventListener("click",()=>{
+  const size = Number(state.modeSize) || 10;
+  const ok = confirm(`Se creará un nuevo intento aleatorio de ${size} preguntas. El intento actual se reemplazará. ¿Continuar?`);
+  if(ok){
+    buildAttempt(size);
+    renderAll();
+    window.scrollTo({top:0,behavior:"smooth"});
+  }
+});
+studentName.addEventListener("input",()=>{
+  state.name = studentName.value.trim();
+  saveState();
+});
 
 loadState();
 renderAll();
